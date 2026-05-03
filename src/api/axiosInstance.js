@@ -1,9 +1,14 @@
 import axios from 'axios';
 
+// const axiosInstance = axios.create({
+//   baseURL: 'http://localhost:5000/api',
+// });
+
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://memberbackend.onrender.com/api',
 });
 
+// https://memberbackend.onrender.com
 // Request Interceptor: Attach Token
 axiosInstance.interceptors.request.use(
   (config) => {
