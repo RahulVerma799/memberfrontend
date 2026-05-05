@@ -1,19 +1,15 @@
 import axios from 'axios';
 
-// const axiosInstance = axios.create({
-//   baseURL: 'http://localhost:5000/api',
-// });
-
 const axiosInstance = axios.create({
-  baseURL: 'https://memberbackend.onrender.com/api',
+  baseURL: 'http://localhost:5000/api', // Local development URL
 });
 
-// https://memberbackend.onrender.com
 // Request Interceptor: Attach Token
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
-    if (token) {
+    // Ensure token is not null, undefined, or the string "null"/"undefined"
+    if (token && token !== 'null' && token !== 'undefined') {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -23,15 +19,14 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response Interceptor: Handle Global Errors (Optional)
+// Response Interceptor: Handle Global Errors
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // You can handle global errors here (e.g., redirect to login if 401)
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      // window.location.href = '/login'; // Optional: Auto-redirect
+      // Optional: window.location.href = '/login';
     }
     return Promise.reject(error);
   }

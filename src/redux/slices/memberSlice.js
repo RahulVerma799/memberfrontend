@@ -43,6 +43,20 @@ const memberSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    updateMemberRequest: (state) => {
+      state.isLoading = true;
+    },
+    updateMemberSuccess: (state, action) => {
+      state.isLoading = false;
+      const index = state.members.findIndex((m) => m._id === action.payload._id);
+      if (index !== -1) {
+        state.members[index] = action.payload;
+      }
+    },
+    updateMemberFailure: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -56,6 +70,9 @@ export const {
   deleteMemberRequest,
   deleteMemberSuccess,
   deleteMemberFailure,
+  updateMemberRequest,
+  updateMemberSuccess,
+  updateMemberFailure,
 } = memberSlice.actions;
 
 export default memberSlice.reducer;

@@ -10,6 +10,9 @@ import {
   deleteMemberRequest,
   deleteMemberSuccess,
   deleteMemberFailure,
+  updateMemberRequest,
+  updateMemberSuccess,
+  updateMemberFailure,
 } from '../slices/memberSlice';
 
 function* handleFetchMembers() {
@@ -42,8 +45,20 @@ function* handleDeleteMember(action) {
   }
 }
 
+function* handleUpdateMember(action) {
+  try {
+    const { id, formData } = action.payload;
+    const response = yield call(axiosInstance.put, `/members/${id}`, formData);
+    yield put(updateMemberSuccess(response.data));
+  } catch (error) {
+    const message = error.response?.data?.message || error.message;
+    yield put(updateMemberFailure(message));
+  }
+}
+
 export default function* memberSaga() {
   yield takeLatest(fetchMembersRequest.type, handleFetchMembers);
   yield takeLatest(addMemberRequest.type, handleAddMember);
   yield takeLatest(deleteMemberRequest.type, handleDeleteMember);
+  yield takeLatest(updateMemberRequest.type, handleUpdateMember);
 }
